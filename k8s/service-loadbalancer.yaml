@@ -1,0 +1,13 @@
+# service-loadbalancer.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: wisecow-loadbalancer
+spec:
+  selector:
+    app: wisecow
+  ports:
+  - port: 443
+    targetPort: 4499
+    nodePort: 30443
+  type: LoadBalancer
