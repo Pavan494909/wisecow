@@ -49,7 +49,7 @@ main() {
 	echo "Wisdom served on port=$SRVPORT..."
 
 	while [ 1 ]; do
-		cat $RSPFILE | nc $TLS_OPTS -lN $SRVPORT | handleRequest
+		cat $RSPFILE | nc $TLS_OPTS -l $SRVPORT | handleRequest
 		sleep 0.01
 	done
 }
