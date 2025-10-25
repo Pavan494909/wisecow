@@ -1,0 +1,73 @@
+name: CI/CD Pipeline - Build, Push and Deploy
+
+on:
+  push:
+    branches: [ main]
+
+jobs:
+  build-and-push:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+    
+    outputs:
+      image_tag: ${{ github.sha }}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: pavan494909v
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build Docker image
+      run: |
+        docker build -t pavan494909v/wisecow:latest -t pavan494909v/wisecow:${{ github.sha }} .
+        echo "✅ Docker image built successfully"
+
+    - name: Test the image
+      run: |
+        docker run --rm pavan494909v/wisecow:latest which cowsay fortune nc
+        echo "✅ All dependencies verified"
+
+    - name: Push to Docker Hub
+      run: |
+        docker push pavan494909v/wisecow:latest
+        docker push pavan494909v/wisecow:${{ github.sha }}
+        echo "✅ Images pushed to Docker Hub"
+
+    - name: Output image tag
+      run: |
+        echo "IMAGE_TAG=${{ github.sha }}" >> $GITHUB_OUTPUT
+
+  deploy:
+    name: Deploy to Kubernetes
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Install kubectl
+      uses: azure/setup-kubectl@v3  
+      
+    - name: Configure kubeconfig
+      run: |
+        mkdir ${HOME}/.kube
+        echo ${{ secrets.KUBECONFIG }} | base64 -d > ${HOME}/.kube/config
+        cat ${HOME}/.kube/config
+      
+    - name: Use Context
+      run: kubectl config use-context cicd-sa-context
+    - name: Deploy to K8s
+      run: |
+            kubectl apply -f k8s/deployment.yaml
+            kubectl apply -f k8s/service.yaml
+            kubectl get deployment
+            kubectl get pods
