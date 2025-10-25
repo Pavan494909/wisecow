@@ -1,0 +1,34 @@
+apiVersion: security.kubearmor.com/v1
+kind: KubeArmorPolicy
+metadata:
+  name: wisecow-simple-policy
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: wisecow
+  action: Block
+  severity: 8
+  
+  # Process Whitelisting - Only allow specific processes
+  process:
+    matchPaths:
+    - path: /usr/games/cowsay
+    - path: /usr/games/fortune
+    - path: /bin/nc
+    - path: /bin/bash
+    - path: /app/wisecow.sh
+    
+  # File Access Control
+  file:
+    matchPaths:
+    - path: /app/wisecow.sh
+      readOnly: true
+    - path: /app/LICENSE
+      readOnly: true
+    - path: /etc/passwd
+      readOnly: true
+    - path: /etc/shadow
+      action: Block
+    - path: /proc/*
+      action: Block

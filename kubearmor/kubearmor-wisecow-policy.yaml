@@ -1,0 +1,63 @@
+apiVersion: security.kubearmor.com/v1
+kind: KubeArmorPolicy
+metadata:
+  name: wisecow-zero-trust-policy
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: wisecow
+  action: Block
+  severity: 10
+  
+  # File System Protection
+  file:
+    matchPaths:
+    - path: /app/wisecow.sh
+      readOnly: true
+    - path: /app/LICENSE
+      readOnly: true
+    - path: /tmp
+      readOnly: false
+    - path: /etc/passwd
+      readOnly: true
+    - path: /etc/shadow
+      action: Block
+    
+  # Process Execution Control
+  process:
+    matchPaths:
+    - path: /usr/games/cowsay
+    - path: /usr/games/fortune
+    - path: /bin/nc
+    - path: /bin/bash
+    - path: /usr/bin/curl
+    - path: /bin/ls
+    - path: /bin/cat
+    - path: /usr/bin/wget
+      action: Block
+    - path: /bin/mount
+      action: Block
+    - path: /usr/bin/ssh
+      action: Block
+    
+  # Network Protection
+  network:
+    matchProtocols:
+    - protocol: TCP
+      fromSource:
+      - path: /usr/games/cowsay
+      - path: /usr/games/fortune
+      - path: /bin/nc
+    
+  # Capabilities Blocking - FIXED: using lowercase
+  capabilities:
+    matchCapabilities:
+    - capability: sys_admin
+      action: Block
+    - capability: net_raw
+      action: Block
+    - capability: sys_ptrace
+      action: Block
+    - capability: dac_override
+      action: Block

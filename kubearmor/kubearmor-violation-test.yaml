@@ -1,0 +1,34 @@
+apiVersion: security.kubearmor.com/v1
+kind: KubeArmorPolicy
+metadata:
+  name: wisecow-violation-test
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: wisecow
+  action: Block
+  severity: 5
+  
+  # These will generate violations when tested
+  process:
+    matchPaths:
+    - path: /bin/ls
+    - path: /bin/cat
+    - path: /usr/bin/wget
+    - path: /usr/bin/curl
+    - path: /bin/ps
+    - path: /usr/bin/top
+    - path: /bin/mkdir
+    - path: /bin/rm
+    - path: /usr/bin/whoami
+    - path: /bin/pwd
+    
+  file:
+    matchPaths:
+    - path: /etc/passwd
+    - path: /etc/hosts
+    - path: /proc/cpuinfo
+    - path: /proc/meminfo
+    - path: /root
+    - path: /home
