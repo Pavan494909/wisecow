@@ -1,0 +1,33 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: wisecow-cluster
+networking:
+  apiServerAddress: "0.0.0.0"
+  apiServerPort: 33893
+kubeadmConfigPatches:
+  - |
+    kind: ClusterConfiguration
+    apiServer:
+      certSANs:
+        - "localhost"
+        - "127.0.0.1"
+        - "0.0.0.0"
+        - "34.220.116.205"
+        - "10.96.0.1"
+        - "172.18.0.2"
+nodes:
+  - role: control-plane
+    image: kindest/node:v1.33.1
+    extraPortMappings:
+      - containerPort: 30007
+        hostPort: 30007
+        listenAddress: "0.0.0.0"
+        protocol: TCP
+      - containerPort: 30443
+        hostPort: 30443
+        listenAddress: "0.0.0.0"
+        protocol: TCP
+  - role: worker
+    image: kindest/node:v1.33.1
+  - role: worker
+    image: kindest/node:v1.33.1
