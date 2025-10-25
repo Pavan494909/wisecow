@@ -1,0 +1,11 @@
+{
+    "timeout": 15,
+    "retry_attempts": 3,
+    "retry_delay": 2,
+    "expected_status_codes": [200, 201, 202, 204, 301, 302],
+    "critical_keywords": ["error", "exception", "down", "maintenance", "unavailable"],
+    "success_keywords": ["success", "ok", "running", "healthy", "welcome"],
+    "alert_email": "pavangoli992@gmail.com",
+    "smtp_server": "smtp.gmail.com",
+    "smtp_port": 587
+}

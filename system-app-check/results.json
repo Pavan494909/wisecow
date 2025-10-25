@@ -1,0 +1,35 @@
+[
+  {
+    "name": "WiseCow App",
+    "url": "http://localhost:30007",
+    "status": "DOWN",
+    "status_code": null,
+    "response_time_ms": null,
+    "timestamp": "2025-10-25T15:12:57.698155",
+    "error": "('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))"
+  },
+  {
+    "name": "HTTPBin Test",
+    "url": "https://httpbin.org/status/200",
+    "status": "UP",
+    "status_code": 200,
+    "response_time_ms": 1723.59,
+    "timestamp": "2025-10-25T15:12:59.421838",
+    "content_analysis": {
+      "has_critical_keywords": false,
+      "has_success_keywords": false
+    }
+  },
+  {
+    "name": "Google",
+    "url": "https://google.com",
+    "status": "DOWN",
+    "status_code": 200,
+    "response_time_ms": 122.21,
+    "timestamp": "2025-10-25T15:12:59.544878",
+    "content_analysis": {
+      "has_critical_keywords": true,
+      "has_success_keywords": true
+    }
+  }
+]
