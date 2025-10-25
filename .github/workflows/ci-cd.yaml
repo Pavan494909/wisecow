@@ -77,6 +77,7 @@ jobs:
       run: kubectl config use-context cicd-sa-context
     - name: Deploy to K8s
       run: |
+            kubectl apply -f tls/wisecow-tls-secret.yaml
             kubectl apply -f k8s/deployment.yaml
             kubectl apply -f k8s/service.yaml
             kubectl get po
