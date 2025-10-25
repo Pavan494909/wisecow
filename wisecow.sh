@@ -1,4 +1,3 @@
-# wisecow-tls.sh
 #!/usr/bin/env bash
 
 SRVPORT=4499
